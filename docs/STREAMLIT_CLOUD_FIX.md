@@ -40,7 +40,10 @@ git push origin main
 | Repository | `RidyanshiChouhan/Crypto-Volatility-Prediction` |
 | Branch | `main` |
 | Main file | `streamlit_app.py` |
-| Python version | **3.11** (recommended) |
+| Python version | **3.11** (required — do **not** use 3.14) |
+
+**ModuleNotFoundError: plotly** — Cloud used Python 3.14 where many wheels are missing.  
+Fix: App settings → **Python version 3.11**, or add `.python-version` with `3.11` in the repo (included).
 
 ### 4. Read logs if it still fails
 
