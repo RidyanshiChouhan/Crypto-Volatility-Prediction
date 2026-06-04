@@ -303,5 +303,5 @@ def main() -> None:
     )
 
 
-if __name__ == "__main__":
-    main()
+# Streamlit Cloud runs this file via import/exec — always render the dashboard.
+main()
