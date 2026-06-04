@@ -18,7 +18,8 @@ from src.feature_engineering import (
 )
 from src.preprocessing import preprocess_dataset, save_processed
 from src.config import BEST_MODEL_PATH
-from src.training import run_full_training_pipeline, time_series_train_test_split, load_model
+from src.model_io import load_model
+from src.training import run_full_training_pipeline, time_series_train_test_split
 from src.feature_engineering import drop_na_for_training, get_feature_columns, TARGET_COL
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")

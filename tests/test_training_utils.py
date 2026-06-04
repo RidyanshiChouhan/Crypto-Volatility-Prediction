@@ -6,7 +6,8 @@ import joblib
 import pytest
 from sklearn.linear_model import LinearRegression
 
-from src.training import save_model, load_model, extract_feature_importance, get_model_registry
+from src.model_io import save_model, load_model
+from src.training import extract_feature_importance, get_model_registry
 
 
 def test_save_load_model(tmp_path):

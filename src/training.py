@@ -9,9 +9,6 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
-import joblib
-import mlflow
-import mlflow.sklearn
 import numpy as np
 import pandas as pd
 from lightgbm import LGBMRegressor
@@ -34,12 +31,19 @@ from src.config import (
 from src.evaluation import compare_models, compute_metrics, save_comparison, save_metrics, select_best_model
 from src.config import MLFLOW_TRACKING_URI
 from src.feature_engineering import TARGET_COL, drop_na_for_training, get_feature_columns
+from src.model_io import load_model, save_model
 
 logger = logging.getLogger(__name__)
 
-# Use project-local mlruns (set in config before import side effects)
-mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-mlflow.set_experiment("crypto_volatility_prediction")
+
+def _mlflow_run():
+    """Lazy MLflow init (not required for Streamlit inference)."""
+    import mlflow
+    import mlflow.sklearn
+
+    mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+    mlflow.set_experiment("crypto_volatility_prediction")
+    return mlflow
 
 
 def time_series_train_test_split(
@@ -106,6 +110,8 @@ def train_all_models(
 
     models: Dict[str, Any] = {}
     metrics_map: Dict[str, Dict[str, float]] = {}
+
+    mlflow = _mlflow_run()
 
     for name, model in get_model_registry().items():
         logger.info("Training %s...", name)
@@ -182,22 +188,6 @@ def hyperparameter_tune(
     return search.best_estimator_, search.best_params_
 
 
-def save_model(model: Any, path: Path, metadata: Optional[dict] = None) -> None:
-    """Save model with optional metadata."""
-    MODELS_DIR.mkdir(parents=True, exist_ok=True)
-    payload = {"model": model, "metadata": metadata or {}}
-    joblib.dump(payload, path)
-    logger.info("Saved model to %s", path)
-
-
-def load_model(path: Path) -> Tuple[Any, dict]:
-    """Load model and metadata."""
-    payload = joblib.load(path)
-    if isinstance(payload, dict) and "model" in payload:
-        return payload["model"], payload.get("metadata", {})
-    return payload, {}
-
-
 def extract_feature_importance(model: Any, feature_columns: list[str]) -> pd.DataFrame:
     """Extract feature importance from tree-based models."""
     if hasattr(model, "feature_importances_"):
@@ -229,6 +219,7 @@ def run_full_training_pipeline(
     feature_columns = get_feature_columns(df)
     train_df, test_df = time_series_train_test_split(df)
 
+    mlflow = _mlflow_run()
     with mlflow.start_run(run_name="full_pipeline"):
         models, comparison, metrics_map = train_all_models(train_df, test_df, feature_columns)
         save_comparison(comparison)

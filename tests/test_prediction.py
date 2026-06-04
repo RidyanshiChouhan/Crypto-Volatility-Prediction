@@ -9,7 +9,8 @@ from src.data_loader import generate_synthetic_crypto_data
 from src.evaluation import compute_metrics, compare_models, select_best_model
 from src.feature_engineering import TARGET_COL, drop_na_for_training, engineer_features, get_feature_columns
 from src.predict import VolatilityPredictor, portfolio_risk_analysis
-from src.training import save_model, load_model, time_series_train_test_split
+from src.model_io import save_model, load_model
+from src.training import time_series_train_test_split
 from src.config import BEST_MODEL_PATH
 import joblib
 from pathlib import Path

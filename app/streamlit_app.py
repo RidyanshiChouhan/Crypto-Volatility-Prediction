@@ -29,7 +29,7 @@ from src.config import (
     REPORTS_DIR,
     SYMBOL_DISPLAY,
 )
-from src.data_loader import fetch_and_save_all, get_live_prices, load_all_raw
+from src.data_loader import generate_synthetic_crypto_data, get_live_prices, load_all_raw
 from src.feature_engineering import engineer_features
 from src.predict import VolatilityPredictor, portfolio_risk_analysis
 from src.preprocessing import load_processed
@@ -57,7 +57,12 @@ def load_market_data() -> pd.DataFrame:
         raw = load_all_raw()
         return engineer_features(raw)
     except FileNotFoundError:
-        combined = fetch_and_save_all(days=365)
+        # Streamlit Cloud: no raw CSV/API — use bundled synthetic data
+        frames = [
+            generate_synthetic_crypto_data(sym, n_days=800, seed=42)
+            for sym in CRYPTO_SYMBOLS
+        ]
+        combined = pd.concat(frames, ignore_index=True)
         return engineer_features(combined)
 
 

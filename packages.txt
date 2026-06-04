@@ -1,2 +1,1 @@
-# System packages for Streamlit Cloud (if needed)
-# Leave empty for default
+libgomp1

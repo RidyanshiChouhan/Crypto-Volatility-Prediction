@@ -13,7 +13,7 @@ import pandas as pd
 
 from src.config import BEST_MODEL_PATH, RISK_HIGH_PERCENTILE, RISK_LOW_PERCENTILE
 from src.feature_engineering import TARGET_COL, add_technical_indicators, get_feature_columns
-from src.training import load_model
+from src.model_io import load_model
 
 logger = logging.getLogger(__name__)
 
