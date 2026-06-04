@@ -73,7 +73,11 @@ class VolatilityPredictor:
             raise ValueError("Insufficient data for prediction after feature engineering")
 
         cols = self.feature_columns or get_feature_columns(enriched)
-        X = enriched[cols].iloc[[-1]].values
+        missing = [c for c in cols if c not in enriched.columns]
+        if missing:
+            raise ValueError(f"Missing features for model: {missing[:5]}...")
+        X = enriched[cols].iloc[[-1]]
+        # DataFrame input preserves feature names for sklearn / LightGBM
         pred = float(self.model.predict(X)[0])
 
         enriched = enriched.copy()

@@ -17,7 +17,12 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 def filter_by_date_range(df: pd.DataFrame, start, end) -> pd.DataFrame:
-    mask = (df["date"] >= pd.Timestamp(start)) & (df["date"] <= pd.Timestamp(end))
+    if df.empty:
+        return df
+    start_ts = pd.Timestamp(start)
+    end_ts = pd.Timestamp(end) + pd.Timedelta(days=1) - pd.Timedelta(seconds=1)
+    dates = pd.to_datetime(df["date"])
+    mask = (dates >= start_ts) & (dates <= end_ts)
     return df.loc[mask].copy()
 
 
