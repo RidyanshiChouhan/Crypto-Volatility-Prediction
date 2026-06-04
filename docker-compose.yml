@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  crypto-volatility-app:
+    build: .
+    container_name: crypto-volatility-prediction
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./reports:/app/reports
+    environment:
+      - PYTHONPATH=/app
+    restart: unless-stopped

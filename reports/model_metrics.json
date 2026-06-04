@@ -1,0 +1,55 @@
+{
+  "best_model_name": "xgboost",
+  "feature_columns": [
+    "daily_return",
+    "log_return",
+    "rolling_volatility_7",
+    "rolling_volatility_14",
+    "rolling_volatility_30",
+    "sma_7",
+    "ema_7",
+    "sma_14",
+    "ema_14",
+    "sma_30",
+    "ema_30",
+    "rsi",
+    "macd",
+    "macd_signal",
+    "bb_upper",
+    "bb_lower",
+    "bb_width",
+    "atr",
+    "momentum",
+    "rate_of_change",
+    "liquidity_ratio",
+    "price_range",
+    "volatility_index",
+    "close_to_sma30",
+    "volume_sma_ratio"
+  ],
+  "n_train": 160,
+  "n_test": 40,
+  "metrics": {
+    "linear_regression": {
+      "rmse": 0.005782374199789875,
+      "mae": 0.005015166296786491,
+      "r2": 0.6885395190844681
+    },
+    "random_forest": {
+      "rmse": 0.004702685168733102,
+      "mae": 0.0035439660634988416,
+      "r2": 0.793992812248826
+    },
+    "xgboost": {
+      "rmse": 0.004657131849882203,
+      "mae": 0.003861688334698832,
+      "r2": 0.7979645260472549
+    },
+    "lightgbm": {
+      "rmse": 0.005014699423307335,
+      "mae": 0.004242999519239746,
+      "r2": 0.7657495804394364
+    }
+  },
+  "improvement_over_baseline_pct": 19.45986736639358
+}
